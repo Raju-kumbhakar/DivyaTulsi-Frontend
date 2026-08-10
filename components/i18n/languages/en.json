@@ -1,0 +1,70 @@
+{
+  "hey": "Hey",
+  "welcome_back": "Welcome Back",
+  "please_login_continue": "Please login to continue",
+  "enter_email": "Enter your email",
+  "enter_password": "Enter your password",
+  "forget_password": "Forget Password",
+  "login": "Login",
+  "dont_have_account": "Don't have an account?",
+  "sign_up": "Sign Up",
+
+  "divyaTulsi": "DivyaTulsi",
+  "welcome_back_exclaim": "Welcome Back!",
+  "smart_health_assistant_ready": "Your smart health assistant is ready to guide you",
+  "quick_actions": "Quick Actions",
+  "track_health": "Track Health",
+  "mediGuide": "MediGuide",
+  "explore": "Explore",
+  "help": "Help",
+
+  "did_you_know": "Did you know?",
+  "track_all_metrics": "You can track all health metrics in one place using our dashboard",
+
+  "ai_assistant": "AI Assistant",
+  "type_message": "Type a message...",
+
+  "health_hub": "Health Hub",
+  "emergency": "Emergency",
+  "quick_access_services": "Quick access to health services",
+
+  "hospitals": "Hospitals",
+  "doctor": "Doctor",
+  "ambulance": "Ambulance",
+  "medicals_nearby": "Medicals Nearby",
+  "chat": "Chat",
+  "nearby": "Nearby",
+
+  "nearby_hospital_locator": "Nearby Hospital Locator",
+  "find_nearest_hospital": "Find the nearest hospital instantly",
+  "open_hospital_near_me": "Open hospital near me",
+  "nearby_hospitals_offline": "Nearby Hospitals (Offline List)",
+
+  "aarogyam_hospital": "Aarogyam Hospital",
+  "call": "Call",
+  "map": "Map",
+  "bhagwanpur_uttarakhand": "Bhagwanpur, Uttarakhand",
+  "jeevan_jyoti_hospital": "Jeevan Jyoti Hospital",
+  "khasra": "Khasra",
+  "roorkee_hospital": "Roorkee Hospital",
+  "labour_chowk_roorkee": "Labour Chowk, Roorkee",
+
+  "doctors_directory": "Doctors Directory",
+  "ambulance_services": "Ambulance Services",
+  "state_ambulance_108": "State Ambulance (108)",
+  "local_private_ambulance": "Local Private Ambulance",
+
+  "medicine_reminders": "Medicine Reminders",
+  "medicine_name": "Medicine Name",
+  "time": "Time",
+  "add_reminder": "Add Reminder",
+
+  "download_report": "Download Report",
+  "edit_profile": "Edit Profile",
+  "change_password": "Change Password",
+  "logout": "Logout",
+  "home": "Home",
+  "assistant": "Assistant",
+  "service": "Service",
+  "profile": "Profile"
+}

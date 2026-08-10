@@ -1,0 +1,70 @@
+{
+  "hey": "नमस्ते",
+  "welcome_back": "वापस स्वागत है",
+  "please_login_continue": "जारी रखने के लिए कृपया लॉगिन करें",
+  "enter_email": "अपना ईमेल दर्ज करें",
+  "enter_password": "अपना पासवर्ड दर्ज करें",
+  "forget_password": "पासवर्ड भूल गए",
+  "login": "लॉगिन",
+  "dont_have_account": "क्या आपका खाता नहीं है?",
+  "sign_up": "साइन अप",
+
+  "divyaTulsi": "दिव्यतुलसी",
+  "welcome_back_exclaim": "वापस स्वागत है!",
+  "smart_health_assistant_ready": "आपका स्मार्ट स्वास्थ्य सहायक आपकी सहायता के लिए तैयार है",
+  "quick_actions": "त्वरित क्रियाएँ",
+  "track_health": "स्वास्थ्य ट्रैक करें",
+  "mediGuide": "मेडीगाइड",
+  "explore": "एक्सप्लोर करें",
+  "help": "सहायता",
+
+  "did_you_know": "क्या आप जानते हैं?",
+  "track_all_metrics": "आप हमारे डैशबोर्ड का उपयोग करके सभी स्वास्थ्य मेट्रिक्स एक ही स्थान पर ट्रैक कर सकते हैं",
+
+  "ai_assistant": "एआई सहायक",
+  "type_message": "संदेश लिखें...",
+
+  "health_hub": "हेल्थ हब",
+  "emergency": "आपातकाल",
+  "quick_access_services": "स्वास्थ्य सेवाओं तक त्वरित पहुंच",
+
+  "hospitals": "अस्पताल",
+  "doctor": "डॉक्टर",
+  "ambulance": "एम्बुलेंस",
+  "medicals_nearby": "नजदीकी मेडिकल्स",
+  "chat": "चैट",
+  "nearby": "नज़दीकी",
+
+  "nearby_hospital_locator": "नजदीकी अस्पताल लोकेटर",
+  "find_nearest_hospital": "सबसे नजदीकी अस्पताल तुरंत खोजें",
+  "open_hospital_near_me": "मेरे पास खुले अस्पताल",
+  "nearby_hospitals_offline": "नजदीकी अस्पताल (ऑफ़लाइन सूची)",
+
+  "aarogyam_hospital": "आरोग्यम अस्पताल",
+  "call": "कॉल",
+  "map": "मानचित्र",
+  "bhagwanpur_uttarakhand": "भगवानपुर, उत्तराखंड",
+  "jeevan_jyoti_hospital": "जीवन ज्योति अस्पताल",
+  "khasra": "खसरा",
+  "roorkee_hospital": "रुड़की अस्पताल",
+  "labour_chowk_roorkee": "लेबर चौराहा, रुड़की",
+
+  "doctors_directory": "डॉक्टर्स डायरेक्टरी",
+  "ambulance_services": "एम्बुलेंस सेवाएँ",
+  "state_ambulance_108": "राज्य एम्बुलेंस (108)",
+  "local_private_ambulance": "स्थानीय निजी एम्बुलेंस",
+
+  "medicine_reminders": "दवा रिमाइंडर",
+  "medicine_name": "दवा का नाम",
+  "time": "समय",
+  "add_reminder": "रिमाइंडर जोड़ें",
+
+  "download_report": "रिपोर्ट डाउनलोड करें",
+  "edit_profile": "प्रोफ़ाइल संपादित करें",
+  "change_password": "पासवर्ड बदलें",
+  "logout": "लॉगआउट",
+  "home": "होम",
+  "assistant": "सहायक",
+  "service": "सेवा",
+  "profile": "प्रोफ़ाइल"
+}
