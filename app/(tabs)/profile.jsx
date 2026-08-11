@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useRouter, useFocusEffect } from "expo-router";
+import { logout } from '../../utils/authService';
 import { LinearGradient } from "expo-linear-gradient";
 
 const ProfileScreen = () => {
@@ -36,22 +37,9 @@ const ProfileScreen = () => {
 
   // Logout Handler
   const handleLogout = async () => {
-    Alert.alert(
-      "Logout",
-      "Are you sure you want to logout?",
-      [
-        { text: "Cancel", style: "cancel" },
-        { 
-          text: "Logout", 
-          style: "destructive",
-          onPress: async () => {
-            await AsyncStorage.removeItem("user");
-            router.replace("/(auth)/login");
-          }
-        }
-      ]
-    );
-  };
+  await logout();
+  router.replace('/(auth)/login');
+};
 
   // Navigate to Edit Profile with callback
   const handleEditProfile = () => {

@@ -12,8 +12,9 @@ import { theme } from '../../constants/theme';
 import { hp, wp } from '../../helpers/common';
 
 import { HugeiconsIcon } from '@hugeicons/react-native';
-
 import { Call02Icon, Mail02Icon, SquareLock01Icon, UserIcon, } from '@hugeicons/core-free-icons';
+
+import api from '../../utils/api';
 
 const SignUp = () => {
   const router = useRouter();
@@ -22,88 +23,71 @@ const SignUp = () => {
   const phone = useRef('');
   const password = useRef('');
   const confirm = useRef('');
-  const [role, setRole] = useState('Patient');
+  const [role, setRole] = useState('patient');
   const [loading, setLoading] = useState(false);
 
-const onSubmit = async () => {
-  if (
-    !name.current ||
-    !email.current ||
-    !phone.current ||
-    !password.current ||
-    !confirm.current
-  ) {
-    return Alert.alert(
-      'Sign Up',
-      'Please fill all fields'
-    );
-  }
-  if (password.current !== confirm.current) {
-    return Alert.alert(
-      'Sign Up',
-      'Passwords do not match'
-    );
-  }
-  setLoading(true);
-
-  try {
-    const res = await fetch(
-      'http://10.88.86.70:8000/api/user/register',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: name.current.trim(),
-          email: email.current.trim().toLowerCase(),
-          phone: phone.current.trim(),
-          password: password.current,
-          role: role,
-        }),
-      }
-    );
-
-    const data = await res.json();
-    console.log('REGISTER RESPONSE:', data);
-    if (!res.ok) {
-      return Alert.alert(
-        'Error',
-        data.message || 'Registration failed'
-      );
+  const onSubmit = async () => {
+    if (
+      !name.current ||
+      !email.current ||
+      !phone.current ||
+      !password.current ||
+      !confirm.current
+    ) {
+      return Alert.alert('Sign Up', 'Please fill all fields');
     }
-    Alert.alert(
-      'Success',
-      data.message ||
-        'Registration successful. Please verify your email.',
-      [
-        {
-          text: 'OK',
-          onPress: () => {
-            router.push({
-              pathname: '/(auth)/verifyOtp',
-              params: {
-                email: email.current.trim().toLowerCase(),
-              },
-            });
-          },
-        },
-      ]
-    );
+    if (password.current !== confirm.current) {
+      return Alert.alert('Sign Up', 'Passwords do not match');
+    }
 
-  } catch (error) {
-    console.error(
-      'REGISTER ERROR:',
-      error
-    );
-    Alert.alert(
-      'Error',
-      'Cannot connect to server'
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    const t0 = Date.now();
+    console.log('REGISTER REQUEST SENT', new Date().toISOString());
+    try {
+      
+      const res = await api.post('/user/register', {
+        name: name.current.trim(),
+        email: email.current.trim().toLowerCase(),
+        phone: phone.current.trim(),
+        password: password.current,
+        role: role,
+      });
+       console.log(`REGISTER SUCCESS at +${Date.now() - t0}ms`);
+      const data = res.data;
+      console.log('REGISTER RESPONSE:', data);
+
+      Alert.alert(
+        'Success',
+        data.message || 'Registration successful. Please verify your email.',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              router.push({
+                pathname: '/(auth)/verifyOtp',
+                params: {
+                  email: email.current.trim().toLowerCase(),
+                },
+              });
+            },
+          },
+        ]
+      );
+
+    } catch (error) {
+       console.log(`REGISTER FAILED at +${Date.now() - t0}ms`, error.code, error.message);
+      if (error.response) {
+        Alert.alert('Error', error.response.data?.message || 'Registration failed');
+      } else if (error.request) {
+        Alert.alert('Error', 'Cannot reach server — check your IP address and that the device is on the same network.');
+      } else {
+        Alert.alert('Error', error.message);
+      }
+      console.error('REGISTER ERROR:', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const Icon = ({ icon }) => (
     <HugeiconsIcon
@@ -125,20 +109,19 @@ const onSubmit = async () => {
           showsVerticalScrollIndicator={false}
         >
 
-         <Image
-         source={require('../../assets/images/profile.png')}
-        style={styles.image}
-         resizeMode="contain"
-        />
+          <Image
+            source={require('../../assets/images/profile.png')}
+            style={styles.image}
+            resizeMode="contain"
+          />
 
           <Text style={styles.title}>Create Account</Text>
           <Text style={styles.subtitle}>
             Sign up to get started with your dashboard.
           </Text>
 
-          {/* Patient / Doctor Toggle */}
           <View style={styles.toggle}>
-            {['Patient', 'Doctor'].map(item => (
+            {['patient', 'doctor'].map(item => (
               <Pressable
                 key={item}
                 onPress={() => setRole(item)}
@@ -157,7 +140,6 @@ const onSubmit = async () => {
             ))}
           </View>
 
-          {/* Form */}
           <View style={styles.form}>
 
             <Text style={styles.label}>Full Name</Text>
@@ -207,7 +189,6 @@ const onSubmit = async () => {
             />
           </View>
 
-          
           <View style={styles.or}>
             <View style={styles.line} />
             <Text>Or</Text>
@@ -218,17 +199,14 @@ const onSubmit = async () => {
             <Pressable style={styles.social}>
               <FontAwesome name="google" size={22} color="#DB4437" />
             </Pressable>
-
             <Pressable style={styles.social}>
               <FontAwesome name="apple" size={23} color="#000" />
             </Pressable>
-
             <Pressable style={styles.social}>
               <FontAwesome name="facebook" size={22} color="#1877F2" />
             </Pressable>
           </View>
 
-          {/* Login */}
           <View style={styles.footer}>
             <Text style={styles.footerText}>
               Already have an account?
@@ -252,16 +230,14 @@ const styles = StyleSheet.create({
     padding: wp(6),
     paddingTop: hp(2),
     paddingBottom: hp(3),
-   backgroundColor: theme.colors.background
+    backgroundColor: theme.colors.background
   },
-
   title: {
     fontSize: hp(3.3),
     fontWeight: '700',
     textAlign: 'center',
     color: theme.colors.text,
   },
-
   subtitle: {
     textAlign: 'center',
     color: '#999',
@@ -269,14 +245,12 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: hp(2),
   },
-
-   image: {
+  image: {
     width: wp(25),
     height: hp(15),
     alignSelf: 'center',
     marginBottom: hp(1)
   },
-
   toggle: {
     flexDirection: 'row',
     backgroundColor: '#F1F1F1',
@@ -284,65 +258,53 @@ const styles = StyleSheet.create({
     padding: 3,
     marginBottom: hp(1.5),
   },
-
   toggleBtn: {
     flex: 1,
     paddingVertical: 9,
     alignItems: 'center',
     borderRadius: 22,
   },
-
   activeToggle: {
     backgroundColor: theme.colors.primary,
   },
-
   toggleText: {
     color: '#777',
     fontWeight: '500',
   },
-
   activeText: {
     color: '#fff',
     fontWeight: '600',
   },
-
   form: { gap: 5 },
-
   label: {
     fontSize: hp(1.5),
     color: theme.colors.text,
     marginTop: 5,
   },
-
   button: {
     marginTop: 10,
     borderRadius: 30,
     height: hp(6.5),
   },
-
   or: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: hp(2.5),
   },
-
   line: {
     flex: 1,
     height: 1,
     backgroundColor: '#e5e5e5',
   },
-
   orText: {
     marginHorizontal: 12,
     color: '#777',
   },
-
   socials: {
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 12,
   },
-
   social: {
     width: wp(13),
     height: wp(13),
@@ -352,19 +314,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 'auto',
     paddingTop: hp(5),
   },
-
   footerText: {
     color: '#999',
     fontSize: hp(1.6),
   },
-
   login: {
     color: theme.colors.primary,
     fontSize: hp(1.6),
