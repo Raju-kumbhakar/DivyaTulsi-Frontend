@@ -1,6 +1,8 @@
 import { FontAwesome } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
+
+import api from '../../utils/api';
 import { useRef, useState } from 'react';
 import {
   Alert,
@@ -24,110 +26,65 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [remember, setRemember] = useState(false);
 
-  // const fetchUserProfile = async (id, token) => {
-  //   try {
-  //     const res = await fetch(`http://172.168.17.209:8080/api/auth/user/${id}`, {
-  //       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
-  //     });
-  //     const data = await res.json();
-  //     return res.ok ? data : null;
-  //   } catch {
-  //     return null;
-  //   }
-  // };
-
 const onSubmit = async () => {
   if (!emailRef.current || !passwordRef.current) {
-    return Alert.alert(
-      'Login',
-      'Please fill all the fields'
-    );
+    return Alert.alert('Login', 'Please fill all the fields');
   }
-
+  console.log("hello from onSubmit");
   setLoading(true);
 
   try {
-    const res = await fetch(
-      'http://10.88.86.70:8000/api/user/login',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: emailRef.current,
-          password: passwordRef.current,
-        }),
-      }
-    );
+    const res = await api.post('/user/login', {
+      email: emailRef.current,
+      password: passwordRef.current,
+    });
 
-    const data = await res.json();
-
+    const data = res.data;
     console.log('LOGIN RESPONSE:', data);
 
-    if (!res.ok) {
-      return Alert.alert(
-        'Error',
-        data.message || 'Invalid credentials'
-      );
-    }
-
-    // Get tokens from backend
-    const accessToken = data.accessToken;
-    const refreshToken = data.refreshToken;
+    const { accessToken, refreshToken, user } = data;
 
     if (!accessToken || !refreshToken) {
-      return Alert.alert(
-        'Error',
-        'Authentication tokens not received'
-      );
+      return Alert.alert('Error', 'Authentication tokens not received');
+    }
+    if (!user?.id) {
+      return Alert.alert('Error', 'User ID not found');
     }
 
-    // Store tokens securely
-    await saveTokens(
-      accessToken,
-      refreshToken
-    );
+    await saveTokens(accessToken, refreshToken);
 
-    // User ID
-    const id = data.user?.id;
+    await AsyncStorage.setItem('user', JSON.stringify({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      isVerified: user.isVerified,
+    }));
 
-    if (!id) {
-      return Alert.alert(
-        'Error',
-        'User ID not found'
-      );
-    }
-
-    // Store user information separately
-    const user = {
-      id: data.user.id,
-      name: data.user.name,
-      email: data.user.email,
-      isVerified: data.user.isVerified,
-    };
-
-    await AsyncStorage.setItem(
-      'user',
-      JSON.stringify(user)
-    );
-
-    Alert.alert(
-      'Success',
-      data.message || 'Login successful!'
-    );
-
+    Alert.alert('Success', data.message || 'Login successful!');
     router.replace('/(tabs)/Home');
 
-  } catch (error) {
-    console.error('LOGIN ERROR:', error);
+  }  catch (error) {
+  if (error.response) {
+    const { status, data } = error.response;
 
-    Alert.alert(
-      'Error',
-      'Cannot connect to server.'
-    );
+    // Unverified user trying to log in — send them to OTP verification
+    if (status === 403 && data.isVerified === false) {
+      Alert.alert('Email Not Verified', data.message || 'Please verify your email first');
+      router.push({
+        pathname: '/(auth)/verifyOtp',
+        params: { email: emailRef.current.trim().toLowerCase() },
+      });
+      return;
+    }
 
-  } finally {
+    Alert.alert('Error', data?.message || 'Invalid credentials');
+  } else if (error.request) {
+    Alert.alert('Error', 'Cannot reach server — check your IP address and that the device is on the same network.');
+  } else {
+    Alert.alert('Error', error.message);
+  }
+  console.error('LOGIN ERROR:', error.message);
+} finally {
     setLoading(false);
   }
 };
