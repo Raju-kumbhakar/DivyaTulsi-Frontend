@@ -1,211 +1,305 @@
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
-const HomeScreen = () => {
-  const router = useRouter();
+const posts = [
+  {
+    user: "mokshmishra",
+    time: "26 days ago",
+    tags: "#gossip   #random   #exams   #confession",
+    text: "daily result ajj ayega sunkar pakka gya hu(btech 2nd sem) 😭😈",
+    likes: 6,
+    comments: 0,
+    views: 80,
+  },
+  {
+    user: "shrishti_7",
+    time: "26 days ago",
+    tags: "#tea   #gossip   #random   #exams   #attendance",
+    text: "Are you excited to go to college?? 😬\nmine is 50/50😌",
+    likes: 15,
+    comments: 12,
+    views: 330,
+  },
+];
 
+export default function Home() {
   return (
-    <SafeAreaView edges={['left','right','bottom']} style={styles.container}>
+    <View style={styles.container}>
 
-
+      {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.appName}>DivyaTulsi</Text>
+        <Text style={styles.logo}>CampusX</Text>
 
-        <TouchableOpacity onPress={() => router.push("/(tabs)/profile")}>
-          <Ionicons name="person-circle-outline" size={40} color="#ffffff" />
-        </TouchableOpacity>
+        <View style={styles.headerIcons}>
+          <Pressable style={styles.anon}>
+            <Ionicons name="eye-off-outline" size={14} color="#999" />
+            <Text style={styles.anonText}>Anon</Text>
+          </Pressable>
+
+          <Ionicons name="search-outline" size={24} color="white" />
+          <Ionicons name="notifications-outline" size={25} color="white" />
+          <Ionicons
+            name="chatbubble-ellipses-outline"
+            size={25}
+            color="white"
+          />
+        </View>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scroll}>
-
-    
-        <View style={styles.heroCard}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.heroTitle}>Welcome Back!</Text>
-            <Text style={styles.heroText}>
-              Your smart health assistant is ready to guide you.
+      {/* Tabs */}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.tabs}
+      >
+        {["For You", "My Campus", "Nearby", "Global"].map((item, index) => (
+          <Pressable
+            key={item}
+            style={[styles.tab, index === 0 && styles.activeTab]}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                index === 0 && styles.activeTabText,
+              ]}
+            >
+              {item}
             </Text>
-          </View>
-          <Image
-            source={{ uri: "https://cdn-icons-png.flaticon.com/512/4320/4320337.png" }}
-            style={styles.heroImage}
-          />
-        </View>
-
-        
-        <Text style={styles.sectionTitle}>Quick Actions</Text>
-
-        <View style={styles.grid}>
-          <FeatureButton
-            icon="pulse-outline"
-            label="Track Health"
-            onPress={() => router.push("/pages/schemesList")}
-            colors={["#4A90E2", "#6BB8FF"]}
-          />
-          <FeatureButton
-            icon="medkit-outline"
-            label="MediGuide"
-            onPress={() => router.push("/pages/Medicines")}
-            colors={["#10B981", "#4ADE80"]}
-          />
-          <FeatureButton
-            icon="compass-outline"
-            label="Explore"
-            onPress={() => router.push("/pages/explore")}
-            colors={["#A855F7", "#C084FC"]}
-          />
-          <FeatureButton
-            icon="help-circle-outline"
-            label="Help"
-            onPress={() => router.push("/pages/help")}
-            colors={["#F59E0B", "#FBBF24"]}
-          />
-        </View>
-
-        <View style={styles.infoCard}>
-          <Ionicons name="information-circle-outline" size={26} color="#4A90E2" />
-          <View style={{ marginLeft: 10 }}>
-            <Text style={styles.infoTitle}>Did You Know?</Text>
-            <Text style={styles.infoText}>
-              You can track all health metrics in one place using our dashboard.
-            </Text>
-          </View>
-        </View>
-
+          </Pressable>
+        ))}
       </ScrollView>
 
-    </SafeAreaView>
-  );
-};
+      {/* Feed */}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.feed}
+      >
+        {posts.map((post, index) => (
+          <View style={styles.post} key={index}>
 
-function FeatureButton({ icon, label, onPress, colors }) {
+            {/* User */}
+            <View style={styles.postHeader}>
+              <View style={styles.avatar}>
+                <Ionicons name="person" size={20} color="#aaa" />
+              </View>
+
+              <View>
+                <View style={styles.nameRow}>
+                  <Text style={styles.username}>{post.user}</Text>
+                  <Text style={styles.time}>{post.time}</Text>
+                </View>
+
+                <Text style={styles.tags}>{post.tags}</Text>
+              </View>
+
+              <Ionicons
+                name="ellipsis-horizontal"
+                size={18}
+                color="#777"
+                style={styles.more}
+              />
+            </View>
+
+            {/* Text */}
+            <Text style={styles.postText}>{post.text}</Text>
+
+            {/* Actions */}
+            <View style={styles.actions}>
+              <Action icon="heart-outline" value={post.likes} />
+              <Action icon="chatbubble-outline" value={post.comments} />
+              <Action icon="repeat-outline" />
+              <Action icon="paper-plane-outline" />
+              <Action icon="bookmark-outline" />
+              <Action icon="eye-outline" value={post.views} />
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+
+    </View>
+  );
+}
+
+function Action({ icon, value }) {
   return (
-    <TouchableOpacity
-      style={[styles.featureBtn, { backgroundColor: colors[0] }]}
-      activeOpacity={0.8}
-      onPress={onPress}
-    >
-      <View style={styles.featureIconContainer}>
-        <Ionicons name={icon} size={30} color="#fff" />
-      </View>
-      <Text style={styles.featureLabel}>{label}</Text>
-    </TouchableOpacity>
+    <View style={styles.action}>
+      <Ionicons name={icon} size={19} color="white" />
+
+      {value !== undefined && (
+        <Text style={styles.count}>{value}</Text>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F2F7FF",
+    backgroundColor: "#080808",
   },
 
+  /* HEADER */
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    height: 100,
+    paddingTop: 45,
     paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: "#4A90E2",
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
-    elevation: 6,
-  
-  },
-
-  appName: {
-    fontSize: 26,
-    fontWeight: "700",
-    color: "#fff",
-  },
-
-  scroll: {
-    padding: 20,
-  },
-
-  heroCard: {
     flexDirection: "row",
-    backgroundColor: "#4A90E2",
-    padding: 20,
-    borderRadius: 22,
     alignItems: "center",
-    elevation: 4,
+    borderBottomWidth: 1,
+    borderColor: "#1c1c1c",
   },
 
-  heroTitle: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: "#fff",
+  logo: {
+    color: "white",
+    fontSize: 20,
+    fontWeight: "800",
   },
 
-  heroText: {
+  headerIcons: {
+    marginLeft: "auto",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 20,
+  },
+
+  anon: {
+    backgroundColor: "#292929",
+    paddingVertical: 7,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+
+  anonText: {
+    color: "#999",
+    fontSize: 13,
+    fontWeight: "600",
+  },
+
+  /* TABS */
+  tabs: {
+    paddingHorizontal:10,
+    paddingVertical: 8,
+  },
+
+  tab: {
+    height: 28,
+    paddingHorizontal: 20,
+    marginRight: 8,
+    borderRadius: 22,
+    backgroundColor: "#1d1d1d",
+    borderWidth: 1,
+    borderColor: "#333",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  activeTab: {
+    backgroundColor: "#8500ff",
+    borderColor: "#8500ff",
+  },
+
+  tabText: {
+    color: "#999",
     fontSize: 14,
-    color: "#E8F1FF",
-    marginTop: 4,
   },
 
-  heroImage: {
-    width: 95,
-    height: 95,
-  },
-
-  sectionTitle: {
-    marginTop: 25,
-    fontSize: 18,
+  activeTabText: {
+    color: "white",
     fontWeight: "700",
-    color: "#333",
   },
 
-  grid: {
+  /* FEED */
+  feed: {
+    paddingBottom: 20,
+  },
+
+  post: {
+    paddingHorizontal: 20,
+    paddingVertical: 18,
+    borderWidth: 1,
+    borderColor: "#242424",
+    borderRadius: 22,
+    marginBottom: 3,
+  },
+
+  postHeader: {
     flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    marginTop: 15,
+    alignItems: "flex-start",
   },
 
-  featureBtn: {
-    width: "47%",
-    borderRadius: 18,
-    paddingVertical: 20,
-    paddingHorizontal: 15,
-    marginBottom: 18,
-    elevation: 4,
+  avatar: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: "#333",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
   },
 
-  featureIconContainer: {
-    backgroundColor: "rgba(255,255,255,0.25)",
-    padding: 12,
-    borderRadius: 50,
-    alignSelf: "flex-start",
-  },
-
-  featureLabel: {
-    marginTop: 15,
-    fontSize: 17,
-    fontWeight: "700",
-    color: "#fff",
-  },
-
-  infoCard: {
+  nameRow: {
     flexDirection: "row",
-    backgroundColor: "#fff",
-    padding: 18,
-    borderRadius: 16,
-    elevation: 3,
-    marginTop: 20,
+    alignItems: "center",
   },
 
-  infoTitle: {
+  username: {
+    color: "white",
     fontSize: 16,
     fontWeight: "700",
-    color: "#4A90E2",
   },
 
-  infoText: {
-    fontSize: 14,
-    color: "#444",
-    marginTop: 3,
+  time: {
+    color: "#777",
+    fontSize: 12,
+    marginLeft: 7,
+  },
+
+  tags: {
+    color: "#4389e8",
+    fontSize: 12,
+    marginTop: 5,
+    maxWidth: 300,
+  },
+
+  more: {
+    marginLeft: "auto",
+    marginTop: 5,
+  },
+
+  postText: {
+    color: "white",
+    fontSize: 16,
+    lineHeight: 23,
+    marginTop: 15,
+    marginLeft: 52,
+    marginBottom: 18,
+  },
+
+  /* ACTIONS */
+  actions: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 5,
+  },
+
+  action: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+
+  count: {
+    color: "#ddd",
+    fontSize: 12,
   },
 });
-
-export default HomeScreen;
